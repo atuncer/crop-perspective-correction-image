@@ -31,9 +31,10 @@ const setUpApplyButton = function () {
         return num
     })
     let dst = new cv.Mat();
-    let dsize = new cv.Size(imageHeight, imageWidth);
+    let newsize = NewSize(pointsArray);
+    let dsize = new cv.Size(newsize[0], newsize[1]);
     let srcTri = cv.matFromArray(4, 1, cv.CV_32FC2, pointsArray);
-    let dstTri = cv.matFromArray(4, 1, cv.CV_32FC2, [0, 0, imageHeight, 0, imageHeight, imageWidth, 0, imageWidth]);
+    let dstTri = cv.matFromArray(4, 1, cv.CV_32FC2, [0, 0, newsize[0], 0, newsize[0], newsize[1], 0, newsize[1]]);
     let M = cv.getPerspectiveTransform(srcTri, dstTri);
     cv.warpPerspective(src, dst, M, dsize, cv.INTER_LINEAR, cv.BORDER_CONSTANT, new cv.Scalar());
     document.getElementById('imageInit').style.display = "none"
@@ -50,3 +51,16 @@ utils.loadOpenCv(() => {
         applyButton.removeAttribute('disabled');
     },500)
 });
+
+
+function NewSize(arr){
+    console.log(arr);
+    let first = Math.sqrt(Math.pow(arr[2] - arr[0], 2) + Math.pow(arr[3] - arr[1], 2))
+    let second = Math.sqrt(Math.pow(arr[4] - arr[6], 2) + Math.pow(arr[5] - arr[7], 2))
+    let wid = Math.max(first, second)
+    let third = Math.sqrt(Math.pow(arr[2] - arr[4], 2) + Math.pow(arr[3] - arr[5], 2))
+    let fourth = Math.sqrt(Math.pow(arr[0] - arr[6], 2) + Math.pow(arr[1] - arr[7], 2))
+    let heig = Math.max(third, fourth)
+    console.log(wid, heig);
+    return [wid | 0, heig | 0]  // converts to integer
+}

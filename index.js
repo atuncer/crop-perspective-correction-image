@@ -99,7 +99,7 @@ window.onload = function() {
         attachCropBox(imgWidth,imgHeight)
     }
     //img.crossOrigin = "anonymous"
-    img.src = "bill.png";
+    img.src = "fut.png";
 }
 
 
